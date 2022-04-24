@@ -13,7 +13,12 @@ app.get("/", (req, res) => {
 
 
 app.get('/users', (req, res) => {
-  res.json({users : users} )
+  //const myObj = JSON.parse(users);
+  let text = "";
+for (const x in users) {
+  text += users[x].username + ", ";
+}
+  res.json(text )
 })
 
 app.listen(3000, () => {
