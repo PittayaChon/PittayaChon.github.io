@@ -45,11 +45,32 @@
 
             </div>
         </div>
+
+        <div class="card">
+            
+            <div class="card-body">
+
+                <input id="material_code" class="form-control form-control-lg" type="text">
+
+                <button onclick="search_material()" type="button" class="btn btn-primary">Primary</button>
+
+            </div>
+        </div>
     </div>
 
-   
-    <script>
 
+    <script>
+        var material;
+        function search_material() {
+
+
+            let search_material_result = material.filter(function (value) {
+                // console.log(value.abbr);
+                return value.code == document.getElementById("material_code").value;
+            });
+            console.log("search_material_result", search_material_result) ;
+            alert(search_material_result)
+        }
 
 
         axios({
@@ -57,9 +78,7 @@
             url: 'https://gist.githubusercontent.com/ChaiyachetU/eb18cb962af268f12825d7c8dc65d570/raw/caf1f611babb5bcd305b673ba47c086340dd0136/pea_material_data.json'
         })
             .then(response => {
-
-                //console.log({"response: ": response.data[1].category } )
-                var material = response.data;
+                material = response.data;
 
                 axios({
                     method: 'get',
@@ -72,32 +91,32 @@
                         var map = new longdo.Map({
                             placeholder: document.getElementById('map')
                         });
-                      
+
                         var province_group = [];
                         var province_group_count = [];
-                        var area_stringify =  JSON.stringify(area).toString() ;
-                         
-                        area_stringify= area_stringify.replace(/latitude\s/g, "latitude");
-                        area_stringify= area_stringify.replace(/longitude\s/g, "longitude");
+                        var area_stringify = JSON.stringify(area).toString();
+
+                        area_stringify = area_stringify.replace(/latitude\s/g, "latitude");
+                        area_stringify = area_stringify.replace(/longitude\s/g, "longitude");
                         console.log("area_stringify: ", area_stringify)
                         // var area_stringify = area_stringify.replace("latitude ", "latitude");
-                         area = JSON.parse(area_stringify) ;
-                         console.log("area: ", area)
+                        area = JSON.parse(area_stringify);
+                        console.log("area: ", area)
 
 
                         for (let i = 0; i < area.length; i++) {
                             // console.log("province " ,area[i]["province"]   ) ;
                             // console.log("latitude " ,area[i]['latitude']   ) ;
                             // console.log("longitude " ,area[i]['longitude']  )
-                           
-                            var marker1 = new longdo.Marker({ lon: area[i]['longitude'] , lat: area[i]['latitude']  },
+
+                            var marker1 = new longdo.Marker({ lon: area[i]['longitude'], lat: area[i]['latitude'] },
                                 {
                                     title: area[i]["region_area"],
                                     icon: {
                                         url: 'https://map.longdo.com/mmmap/images/pin_mark.png',
                                         offset: { x: 12, y: 45 }
                                     },
-                                    detail: '<b>'+area[i]["name"]+'<b><br>'+''+area[i]["abbr"],
+                                    detail: '<b>' + area[i]["name"] + '<b><br>' + '' + area[i]["abbr"],
                                     visibleRange: { min: 2, max: 15 },
                                     draggable: true,
                                     weight: longdo.OverlayWeight.Top,
