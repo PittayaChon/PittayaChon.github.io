@@ -35,11 +35,11 @@
 
 
     <div class="container">
-        <div class="card" style="width: 180rem;">
+        <div class="card">
             <img class="card-img-top" src="..." alt="Card image cap">
             <div class="card-body">
 
-                <div id="map"></div>
+                <div id="map" style="width:100%;  height:600px;"></div>
 
 
 
@@ -47,12 +47,10 @@
         </div>
     </div>
 
-    <p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
+   
     <script>
 
-        var map = new longdo.Map({
-            placeholder: document.getElementById('map')
-        });
+
 
         axios({
             method: 'get',
@@ -70,22 +68,50 @@
                     .then(response => {
 
                         //console.log({"area: ": response.data[1].name } )
-                        // let area = response.data;
-
-
-                        // var province_group = [];
-                        // var province_group_count = [];
-                        // for (let i = 0; i < area.length; i++) {
-                        //     if (province_group.indexOf(area[i].province) < 0) {
-                        //         province_group.push(area[i].province);
-                        //         province_group_count.push({ "province": area[i].province, "count": "0" });
-                        //     }
-                        //     else {
-
-                        //     }
-                        //}
-
                         let area = response.data;
+                        var map = new longdo.Map({
+                            placeholder: document.getElementById('map')
+                        });
+                      
+                        var province_group = [];
+                        var province_group_count = [];
+                        var area_stringify =  JSON.stringify(area).toString() ;
+                         
+                        area_stringify= area_stringify.replace(/latitude\s/g, "latitude");
+                        area_stringify= area_stringify.replace(/longitude\s/g, "longitude");
+                        console.log("area_stringify: ", area_stringify)
+                        // var area_stringify = area_stringify.replace("latitude ", "latitude");
+                         area = JSON.parse(area_stringify) ;
+                         console.log("area: ", area)
+
+
+                        for (let i = 0; i < area.length; i++) {
+                            // console.log("province " ,area[i]["province"]   ) ;
+                            // console.log("latitude " ,area[i]['latitude']   ) ;
+                            // console.log("longitude " ,area[i]['longitude']  )
+                           
+                            var marker1 = new longdo.Marker({ lon: area[i]['longitude'] , lat: area[i]['latitude']  },
+                                {
+                                    title: area[i]["region_area"],
+                                    icon: {
+                                        url: 'https://map.longdo.com/mmmap/images/pin_mark.png',
+                                        offset: { x: 12, y: 45 }
+                                    },
+                                    detail: '<b>'+area[i]["name"]+'<b><br>'+''+area[i]["abbr"],
+                                    visibleRange: { min: 2, max: 15 },
+                                    draggable: true,
+                                    weight: longdo.OverlayWeight.Top,
+                                });
+                            map.Overlays.add(marker1);
+                            // if (province_group.indexOf(area[i].province) < 0) {
+                            //     province_group.push(area[i].province);
+                            //     province_group_count.push({ "province": area[i].province, "count": "0" });
+                            // }
+                            //     else {
+
+                            //     }
+                        }
+
                         //  console.log("area: ", area)
                         let area_filter = area.filter(function (value) {
                             // console.log(value.abbr);
@@ -107,7 +133,7 @@
 
                         sessionStorage.setItem("area_filter", JSON.stringify(area_filter));
 
-                        window.location.href = "index.html";
+                        //  window.location.href = "index.html";
 
 
 
