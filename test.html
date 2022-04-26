@@ -51,8 +51,20 @@
             <div class="card-body">
 
                 <input id="material_code" class="form-control form-control-lg" type="text">
+<br>
+                <button onclick="search_material()" type="button" class="btn btn-primary">ค้นหา material</button>
 
-                <button onclick="search_material()" type="button" class="btn btn-primary">Primary</button>
+            </div>
+        </div>
+
+
+        <div class="card">
+            
+            <div class="card-body">
+
+                <input id="area_name" class="form-control form-control-lg" type="text">
+<br>
+                <button onclick="search_area()" type="button" class="btn btn-primary">ค้นหา area</button>
 
             </div>
         </div>
@@ -61,15 +73,38 @@
 
     <script>
         var material;
+        var area;
         function search_material() {
-
-
             let search_material_result = material.filter(function (value) {
                 // console.log(value.abbr);
                 return value.code == document.getElementById("material_code").value;
             });
             console.log("search_material_result", search_material_result) ;
-            alert(search_material_result[0].name_old)
+            if(search_material_result.length  === 0 )
+            {
+                alert("ไม่พบขอมูล") ;
+            }
+            else
+            {
+                alert(search_material_result[0].name_old) ;
+            }           
+        }
+
+
+        function search_area() {
+            let search_area_result = area.filter(function (value) {
+                // console.log(value.abbr);
+                return value.name == document.getElementById("area_name").value;
+            });
+            console.log("search_area_result", search_area_result) ;
+            if(search_area_result.length  === 0 )
+            {
+                alert("ไม่พบขอมูล") ;
+            }
+            else
+            {
+                alert(search_area_result[0].province) ;
+            }           
         }
 
 
@@ -87,7 +122,7 @@
                     .then(response => {
 
                         //console.log({"area: ": response.data[1].name } )
-                        let area = response.data;
+                        area = response.data;
                         var map = new longdo.Map({
                             placeholder: document.getElementById('map')
                         });
@@ -105,9 +140,11 @@
 
 
                         for (let i = 0; i < area.length; i++) {
-                            // console.log("province " ,area[i]["province"]   ) ;
-                            // console.log("latitude " ,area[i]['latitude']   ) ;
-                            // console.log("longitude " ,area[i]['longitude']  )
+                            console.log("province " ,area[i]   ) ;
+                            //  console.log("province " ,area[i]["province"]   ) ;
+                        
+                            //  console.log("latitude " ,area[i]['latitude']   ) ;
+                            console.log("longitude " ,area[i].longitude  )
 
                             var marker1 = new longdo.Marker({ lon: area[i]['longitude'], lat: area[i]['latitude'] },
                                 {
