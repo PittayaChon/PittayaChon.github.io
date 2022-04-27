@@ -274,7 +274,7 @@
         }
         function UploadProcess() {
             var fileUpload = document.getElementById("fileUpload");
-        
+
             var regex = /(.xls|.xlsx)$/;
             if (regex.test(fileUpload.value.toLowerCase())) {
                 if (typeof (FileReader) != "undefined") {
@@ -295,7 +295,7 @@
                             for (var i = 0; i < bytes.byteLength; i++) {
                                 data += String.fromCharCode(bytes[i]);
                             }
-                           // alert("sss");
+                            // alert("sss");
 
                         };
                         reader.readAsArrayBuffer(fileUpload.files[0]);
@@ -321,7 +321,7 @@
                 count_child = count_child + all_house[i].array.length;
             }
 
-            
+
             //ตรวจสอบว่าด็กเกินจำนวนรึยัง
 
             if (count_child < max_child) {
@@ -331,11 +331,11 @@
                 var min_house = 0;
                 var house_min = [];
                 var result = "";
-               
+
                 for (let i = 0; i < all_house.length; i++) {
-                   
+
                     if (all_house[i].array.length < max_child_house) {
-                       
+
                         all_house[i].array.push(child);
                         flag_note = 1;
                         console.log("all_house_x", all_house[i].name);
@@ -410,7 +410,7 @@
         var workbook = XLSX.read(data, {
             type: 'binary'
         });
-        const first_emp_id = ["0","1", "2", "3", "4", "5", "9"];
+        const first_emp_id = ["0", "1", "2", "3", "4", "5", "9"];
         var emp_all = "";
         var currentdate = new Date();
         var path = currentdate + "";
@@ -426,10 +426,10 @@
             for (var j = 0; j < excelRows.length; j++) {
                 for (const [key, value] of Object.entries(excelRows[j])) {
 
-                   // console.log('value', value);
-                   child = { "name": value };
+                    // console.log('value', value);
+                    child = { "name": value };
                     if (!pick_child(child, max_child_house)) {
-                        break ;
+                        break;
                     }
 
                 }
@@ -441,7 +441,7 @@
                 , { "name": "Slytherin", "length": Slytherin }
                 , { "name": "Ravenclaw", "length": Ravenclaw })
             //     genDataTable();
-genDataTable();
+            genDataTable();
 
         }
 
@@ -449,9 +449,7 @@ genDataTable();
 
     };
 
-    function read_child() {
-        return child;
-    }
+
 
 
 
