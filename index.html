@@ -26,6 +26,10 @@
     <!-- Includes  datatable -->
     <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" crossorigin="anonymous">
+    <!-- Includes  Excel -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js">
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
 
 </head>
 
@@ -35,7 +39,7 @@
             <div class="col-12">
                 <div class="card text-center">
                     <div class="card-header">
-                        Featured
+                        กรอกชื่อ
                     </div>
                     <div class="card-body">
                         <form>
@@ -63,18 +67,18 @@
             <div class="col-12">
                 <div class="card text-center">
                     <div class="card-header">
-                        Featured
+                        UPLOAD ไฟล์ รายชื่อแบบ EXCEL (.xls หรือ.xlsx บรรทัดแรกเป็นหัวคอลัมน์)
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="form-group">
 
                                 <div class="form-group">
-                                    <label for="formFile" class="form-label">Default file input example</label>
-                                    <input class="form-control" type="file" id="formFile">
+                                    <label for="formFile" class="form-label">Input Excel File</label>
+                                    <input class="form-control" type="file" id="fileUpload">
                                 </div>
                                 <br>
-                                <input type="button" class="btn btn-warning" onclick="ArrangeProcess()"
+                                <input type="button" class="btn btn-warning" onclick="UploadProcess()"
                                     value="Upload File รายชื่อ">
                             </div>
                     </div>
@@ -189,9 +193,9 @@
 
         ];
         const count_all_house = 4;
-        const max_child = 5;
+        const max_child = 50;
         const max_child_house = Math.floor(max_child / count_all_house);
-        //สร้าง ตัวแปล เก็บค่าจำนวณคนสูงสุดที่สามารถรถรับ(max) ของแต่ละบ้าน
+        //สร้าง ตัวแปล เก็บค่าจำนวนคนสูงสุดที่สามารถรถรับ(max) ของแต่ละบ้าน
         const max = 50;
         function genDataTable() {
             $('#Gryffindor_table').dataTable().fnClearTable();
@@ -241,7 +245,7 @@
                     title: 'Error!',
                     text: 'กรุณากรอกชื่อ',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'ตกลง'
                 })
 
             }
@@ -254,33 +258,61 @@
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
-                        title: 'ยนดีด้วย',
+                        title: 'ยินดีด้วย',
                         html: 'คุณ <b><font style="color:green" size="5">' + result.child.name + '</font><b> คุณได้เป็นสมาชิกบ้าน <br><b><font style="color:blue" size="6"> "' + result.housename + '"</font></b> ',
                         showConfirmButton: true,
 
                     })
                 }
-                console.log("all_house", { "name": "Gryffindor", "length": Gryffindor },
-                    { "name": "Hufflepuff", "length": Hufflepuff }
-                    , { "name": "Slytherin", "length": Slytherin }
-                    , { "name": "Ravenclaw", "length": Ravenclaw })
+                // console.log("all_house", { "name": "Gryffindor", "length": Gryffindor },
+                //     { "name": "Hufflepuff", "length": Hufflepuff }
+                //     , { "name": "Slytherin", "length": Slytherin }
+                //     , { "name": "Ravenclaw", "length": Ravenclaw })
                 genDataTable();
             }
 
         }
         function UploadProcess() {
+            var fileUpload = document.getElementById("fileUpload");
+        
+            var regex = /(.xls|.xlsx)$/;
+            if (regex.test(fileUpload.value.toLowerCase())) {
+                if (typeof (FileReader) != "undefined") {
+                    var reader = new FileReader();
 
-            var child_arrya = child.child;
-            child_arrya = shuffle(child_arrya);
-            for (let i = 0; i < child_arrya.length; i++) {
-                if (!pick_child(child_arrya[i], max_child_house)) {
-                    break;
+                    //For Browsers other than IE.
+                    if (reader.readAsBinaryString) {
+                        reader.onload = function (e) {
+                            GetTableFromExcel(e.target.result);
+                        };
+                        reader.readAsBinaryString(fileUpload.files[0]);
+
+                    } else {
+                        //For IE Browser.
+                        reader.onload = function (e) {
+                            var data = "";
+                            var bytes = new Uint8Array(e.target.result);
+                            for (var i = 0; i < bytes.byteLength; i++) {
+                                data += String.fromCharCode(bytes[i]);
+                            }
+                           // alert("sss");
+
+                        };
+                        reader.readAsArrayBuffer(fileUpload.files[0]);
+
+                    }
+                } else {
+                    alert("This browser does not support HTML5.");
                 }
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'กรุณา UPLOAD ไฟล์ (.xls หรือ.xlsx)',
+                    icon: 'error',
+                    confirmButtonText: 'ตกลง'
+                })
             }
-            console.log("all_house", { "name": "Gryffindor", "length": Gryffindor },
-                { "name": "Hufflepuff", "length": Hufflepuff }
-                , { "name": "Slytherin", "length": Slytherin }
-                , { "name": "Ravenclaw", "length": Ravenclaw })
+
 
         }
         function pick_child(child, max_child_house) {
@@ -288,7 +320,9 @@
             for (let i = 0; i < all_house.length; i++) {
                 count_child = count_child + all_house[i].array.length;
             }
-            //ตรวจสอบว่าด็กเกินจำนวณรึยัง
+
+            
+            //ตรวจสอบว่าด็กเกินจำนวนรึยัง
 
             if (count_child < max_child) {
                 let child_picker = child;
@@ -297,9 +331,11 @@
                 var min_house = 0;
                 var house_min = [];
                 var result = "";
+               
                 for (let i = 0; i < all_house.length; i++) {
+                   
                     if (all_house[i].array.length < max_child_house) {
-
+                       
                         all_house[i].array.push(child);
                         flag_note = 1;
                         console.log("all_house_x", all_house[i].name);
@@ -336,9 +372,9 @@
             else {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'เต็มจำนวณ ' + max_child + ' คนแล้ว',
+                    text: 'เต็มจำนวน ' + max_child + ' คนแล้ว',
                     icon: 'error',
-                    confirmButtonText: 'Cool'
+                    confirmButtonText: 'ตกลง'
                 })
                 return false;
 
@@ -369,210 +405,48 @@
     });
 
 
+    function GetTableFromExcel(data) {
+        //Read the Excel File data in binary
+        var workbook = XLSX.read(data, {
+            type: 'binary'
+        });
+        const first_emp_id = ["0","1", "2", "3", "4", "5", "9"];
+        var emp_all = "";
+        var currentdate = new Date();
+        var path = currentdate + "";
+        console.log(path);
+        for (var i = 0; i < workbook.SheetNames.length; i++) {
+            console.log(workbook.SheetNames[i]);
+            ///////////////////////////
+            //get the name of First Sheet.
+            var Sheet = workbook.SheetNames[i];
+            //Read all rows from First Sheet into an JSON array.
+            var excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[Sheet]);
+            var count_emp = 0;
+            for (var j = 0; j < excelRows.length; j++) {
+                for (const [key, value] of Object.entries(excelRows[j])) {
 
-    var child = {
-        "child": [
-            {
-                "name": "เฉลิมพงษ์ จันทร์รื่น",
-                "age": 3
-            },
-            {
-                "name": "รัชกฤช ทัพไทย",
-                "age": 9
-            },
-            {
-                "name": "พีระพงษ์ สาระภี",
-                "age": 3
-            },
-            {
-                "name": "อรรถโกวิท ตั้งชีวินศิริกุล",
-                "age": 3
-            },
-            {
-                "name": "มะยุรี มีสวัสดิ์",
-                "age": 8
-            },
-            {
-                "name": "สมภพ ไพศาล",
-                "age": 3
-            },
-            {
-                "name": "ทิพวรรณ ประกอบแก้ว",
-                "age": 7
-            },
-            {
-                "name": "ประวิทย์ สอาดเอี่ยม",
-                "age": 4
-            },
-            {
-                "name": "สุเทพ นิระหานี",
-                "age": 7
-            },
-            {
-                "name": "ภณตรีเจตน์ ธนนันท์โสภณ",
-                "age": 7
-            },
-            {
-                "name": "กฤษดา พงษ์เสริม",
-                "age": 8
-            },
-            {
-                "name": "วราภรณ์ อังศุรัตนเวช",
-                "age": 8
-            },
-            {
-                "name": "อรสา จารุสังวร",
-                "age": 6
-            },
-            {
-                "name": "ณัฐกฤต นามฮุง",
-                "age": 5
-            },
-            {
-                "name": "ณัฐพล นิลศร",
-                "age": 7
-            },
-            {
-                "name": "ไญยิกา นันตะโรหิต",
-                "age": 4
-            },
-            {
-                "name": "ภิรมย์ ช่างเรือน",
-                "age": 6
-            },
-            {
-                "name": "ไวพจน์ ตันเดี่ยว",
-                "age": 9
-            },
-            {
-                "name": "ประสิทธิ์ วงษ์ศักดิ์",
-                "age": 5
-            },
-            {
-                "name": "วันดี งามเสงี่ยม",
-                "age": 3
-            },
-            {
-                "name": "สมศักดิ์ มาพิจารณ์",
-                "age": 4
-            },
-            {
-                "name": "ศรายุธ อยู่ยืน",
-                "age": 5
-            },
-            {
-                "name": "อุดมลักษณ์ วุฒิสิทธิโชค",
-                "age": 4
-            },
-            {
-                "name": "อุดมลักษณ์ เหรียญนิยม",
-                "age": 7
-            },
-            {
-                "name": "สุรี แก้วสนธิ",
-                "age": 7
-            },
-            {
-                "name": "ปิยวิทย์ จิตต์โอภาส",
-                "age": 8
-            },
-            {
-                "name": "มงคล จรัสเพ็ชร์",
-                "age": 4
-            },
-            {
-                "name": "นงลักษณ์ นันทศิริ",
-                "age": 3
-            },
-            {
-                "name": "มนูญ ประสาทศิลป์",
-                "age": 8
-            },
-            {
-                "name": "สมบูรณ์ มณีคุณาภรณ์",
-                "age": 9
-            },
-            {
-                "name": "ศิริเพ็ญ สูตรสุข",
-                "age": 6
-            },
-            {
-                "name": "ปรีดา นุชหมอน",
-                "age": 5
-            },
-            {
-                "name": "ฉลอง ครุฑจีน",
-                "age": 4
-            },
-            {
-                "name": "นัฐศักดิ์ เรืองนุ้ย",
-                "age": 3
-            },
-            {
-                "name": "คมกริช เสาวิจิตร",
-                "age": 5
-            },
-            {
-                "name": "ตอง เทพทาราคุณ",
-                "age": 4
-            },
-            {
-                "name": "มงคล กมลพันธ์",
-                "age": 6
-            },
-            {
-                "name": "กฤษ อภิญญากุล",
-                "age": 7
-            },
-            {
-                "name": "สงวนศักดิ์ แก้วปลั่ง",
-                "age": 7
-            },
-            {
-                "name": "ธนพรรณ คงอินทร์",
-                "age": 4
-            },
-            {
-                "name": "สมชาย ชำนิเขตรการ",
-                "age": 9
-            },
-            {
-                "name": "วลัยลักษณ์ ชินบุรี",
-                "age": 4
-            },
-            {
-                "name": "เกรียงศักดิ์ ทองมา",
-                "age": 7
-            },
-            {
-                "name": "ประกอบ สุภาผล",
-                "age": 7
-            },
-            {
-                "name": "ณัฐพงศ์ ฉ่ำชื่น",
-                "age": 8
-            },
-            {
-                "name": "สุพัตรา รักเดช",
-                "age": 8
-            },
-            {
-                "name": "ธนรัตน์ เฉลิมรักษ์",
-                "age": 3
-            },
-            {
-                "name": "สุทธินันท์ พอสอน",
-                "age": 4
-            },
-            {
-                "name": "ณัฎฐ์ธนัน จันทร์เรือง",
-                "age": 3
-            },
-            {
-                "name": "โกศล เกตุเล็ก",
-                "age": 4
+                   // console.log('value', value);
+                   child = { "name": value };
+                    if (!pick_child(child, max_child_house)) {
+                        break ;
+                    }
+
+                }
+
             }
-        ]
+
+            console.log("all_house_x", { "name": "Gryffindor", "length": Gryffindor },
+                { "name": "Hufflepuff", "length": Hufflepuff }
+                , { "name": "Slytherin", "length": Slytherin }
+                , { "name": "Ravenclaw", "length": Ravenclaw })
+            //     genDataTable();
+genDataTable();
+
+        }
+
+
+
     };
 
     function read_child() {
