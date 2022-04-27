@@ -1,2 +1,2 @@
 # PittayaChon.github.io
-<b> sssssssssssssss </b>
+<b> วิธี Run Program </b>
