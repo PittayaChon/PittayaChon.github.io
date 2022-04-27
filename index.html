@@ -1,18 +1,586 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Harry Potter House</title>
+
+    <!-- Includes  Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <!-- Includes  jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <!-- Includes  sweetalert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Includes  datatable -->
+    <script src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" crossorigin="anonymous">
+
 </head>
+
 <body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+
+                                <div class="form-group-inline">
+                                    <input class="form-control form-control-lg" id="child_name" type="text"
+                                        placeholder="กรอกชื่อ">
+                                </div>
+                                <br>
+                                <input type="button" class="btn btn-primary" onclick="ArrangeProcess()" value="จัดห้อง">
+
+
+
+                            </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- end of row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-center">
+                    <div class="card-header">
+                        Featured
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="form-group">
+
+                                <div class="form-group">
+                                    <label for="formFile" class="form-label">Default file input example</label>
+                                    <input class="form-control" type="file" id="formFile">
+                                </div>
+                                <br>
+                                <input type="button" class="btn btn-warning" onclick="ArrangeProcess()"
+                                    value="Upload File รายชื่อ">
+                            </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- End of row -->
+        <div class="row">
+            <div class="col-6 col-xl-3">
+                <div class="card text-center">
+                    <div class="card-header  text-white bg-success">
+                        รายชื่อบ้าน Gryffindor <div id="Gryffindor_count"> มีสมาชิก 0 ราย</div>
+                    </div>
+                    <div class="card-body">
+                        <table id="Gryffindor_table" class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <!-- End of card -->
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card text-center">
+                    <div class="card-header text-white bg-primary ">
+                        รายชื่อบ้าน Hufflepuff <div id="Hufflepuff_count">มีสมาชิก 0 ราย</div>
+                    </div>
+
+                    <div class="card-body">
+
+                        <table id="Hufflepuff_table" class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+                <!-- End of card -->
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card text-center ">
+                    <div class="card-header text-white bg-danger">
+                        รายชื่อบ้าน Slytherin <div id="Slytherin_count">มีสมาชิก 0 ราย</div>
+                    </div>
+                    <div class="card-body">
+                        <table id="Slytherin_table" class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xl-3">
+                <div class="card text-center">
+                    <div class="card-header text-white bg-warning">
+                        รายชื่อบ้าน Ravenclaw <div id="Ravenclaw_count">มีสมาชิก 0 ราย</div>
+                    </div>
+                    <div class="card-body">
+
+                        <table id="Ravenclaw_table" class="table table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
 
     <script>
+        //สร้าง array เก็บชื่อบ้าน
+        var Gryffindor = [];
+        var Hufflepuff = [];
+        var Slytherin = [];
+        var Ravenclaw = [];
+        var all_house = [
+            {
+                'name': 'Gryffindor',
+                'array': Gryffindor
+            },
+            {
+                'name': 'Hufflepuff',
+                'array': Hufflepuff
+            },
+            {
+                'name': 'Slytherin',
+                'array': Slytherin
+            },
+            {
+                'name': 'Ravenclaw',
+                'array': Ravenclaw
+            }
+
+        ];
+        const count_all_house = 4;
+        const max_child = 5;
+        const max_child_house = Math.floor(max_child / count_all_house);
+        //สร้าง ตัวแปล เก็บค่าจำนวณคนสูงสุดที่สามารถรถรับ(max) ของแต่ละบ้าน
+        const max = 50;
+        function genDataTable() {
+            $('#Gryffindor_table').dataTable().fnClearTable();
+            $('#Gryffindor_table').dataTable().fnDestroy();
+            $('#Gryffindor_table').DataTable({
+                data: Gryffindor,
+                columns: [
+                    { "data": "name" }
+                ]
+            });
+            $('#Gryffindor_count').html("มีสมาชิกจำนวน " + Gryffindor.length + " ราย");
+
+            $('#Hufflepuff_table').dataTable().fnClearTable();
+            $('#Hufflepuff_table').dataTable().fnDestroy();
+            $('#Hufflepuff_table').DataTable({
+                data: Hufflepuff,
+                columns: [
+                    { "data": "name" }
+                ]
+            });
+            $('#Hufflepuff_count').html("มีสมาชิกจำนวน " + Hufflepuff.length + " ราย");
+
+            $('#Slytherin_table').dataTable().fnClearTable();
+            $('#Slytherin_table').dataTable().fnDestroy();
+            $('#Slytherin_table').DataTable({
+                data: Slytherin,
+                columns: [
+                    { "data": "name" }
+                ]
+            });
+            $('#Slytherin_count').html("มีสมาชิกจำนวน " + Slytherin.length + " ราย");
+
+            $('#Ravenclaw_table').dataTable().fnClearTable();
+            $('#Ravenclaw_table').dataTable().fnDestroy();
+            $('#Ravenclaw_table').DataTable({
+                data: Ravenclaw,
+                columns: [
+                    { "data": "name" }
+                ]
+            });
+            $('#Ravenclaw_count').html("มีสมาชิกจำนวน " + Ravenclaw.length + " ราย");
+        }
+        function ArrangeProcess() {
+            var child_name = document.getElementById('child_name').value;
+            if (child_name === "") {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'กรุณากรอกชื่อ',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+
+            }
+            else {
+                child = { "name": child_name };
+                var result = pick_child(child, max_child_house);
+
+                if (result) {
+                    console.log("result", result);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'ยนดีด้วย',
+                        html: 'คุณ <b><font style="color:green" size="5">' + result.child.name + '</font><b> คุณได้เป็นสมาชิกบ้าน <br><b><font style="color:blue" size="6"> "' + result.housename + '"</font></b> ',
+                        showConfirmButton: true,
+
+                    })
+                }
+                console.log("all_house", { "name": "Gryffindor", "length": Gryffindor },
+                    { "name": "Hufflepuff", "length": Hufflepuff }
+                    , { "name": "Slytherin", "length": Slytherin }
+                    , { "name": "Ravenclaw", "length": Ravenclaw })
+                genDataTable();
+            }
+
+        }
+        function UploadProcess() {
+
+            var child_arrya = child.child;
+            child_arrya = shuffle(child_arrya);
+            for (let i = 0; i < child_arrya.length; i++) {
+                if (!pick_child(child_arrya[i], max_child_house)) {
+                    break;
+                }
+            }
+            console.log("all_house", { "name": "Gryffindor", "length": Gryffindor },
+                { "name": "Hufflepuff", "length": Hufflepuff }
+                , { "name": "Slytherin", "length": Slytherin }
+                , { "name": "Ravenclaw", "length": Ravenclaw })
+
+        }
+        function pick_child(child, max_child_house) {
+            var count_child = 0
+            for (let i = 0; i < all_house.length; i++) {
+                count_child = count_child + all_house[i].array.length;
+            }
+            //ตรวจสอบว่าด็กเกินจำนวณรึยัง
+
+            if (count_child < max_child) {
+                let child_picker = child;
+                all_house = shuffle(all_house);
+                var flag_note = 0
+                var min_house = 0;
+                var house_min = [];
+                var result = "";
+                for (let i = 0; i < all_house.length; i++) {
+                    if (all_house[i].array.length < max_child_house) {
+
+                        all_house[i].array.push(child);
+                        flag_note = 1;
+                        console.log("all_house_x", all_house[i].name);
+                        result = { 'child': child, 'housename': all_house[i].name }
+                        break;
+                    }
+
+                }
+                if (flag_note === 0) {
+                    var min = [
+                        { "name": "Gryffindor", "length": Gryffindor.length },
+                        { "name": "Hufflepuff", "length": Hufflepuff.length },
+                        { "name": "Slytherin", "length": Slytherin.length },
+                        { "name": "Ravenclaw", "length": Ravenclaw.length }
+                    ]
+
+                    var min_value = min[0].length;
+                    for (let i = 0; i < min.length; i++) {
+                        if (min[i].length < min_value) {
+                            min_value = min[i].length;
+                        }
+                    }
+                    console.log("min_value", min_value)
+                    for (let i = 0; i < all_house.length; i++) {
+                        if (all_house[i].array.length === min_value) {
+                            all_house[i].array.push(child);
+                            result = { child: child, housename: all_house[i].name }
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+            else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'เต็มจำนวณ ' + max_child + ' คนแล้ว',
+                    icon: 'error',
+                    confirmButtonText: 'Cool'
+                })
+                return false;
+
+            }
+        }
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
 
 
-console.log("area_filter" ,JSON.parse(sessionStorage.getItem("area_filter")));
     </script>
-    
+
 </body>
+<script>
+    $(document).ready(function () {
+
+        $('#Gryffindor_table').DataTable();
+        $('#Hufflepuff_table').DataTable();
+        $('#Slytherin_table').DataTable();
+        $('#Ravenclaw_table').DataTable();
+    });
+
+
+
+    var child = {
+        "child": [
+            {
+                "name": "เฉลิมพงษ์ จันทร์รื่น",
+                "age": 3
+            },
+            {
+                "name": "รัชกฤช ทัพไทย",
+                "age": 9
+            },
+            {
+                "name": "พีระพงษ์ สาระภี",
+                "age": 3
+            },
+            {
+                "name": "อรรถโกวิท ตั้งชีวินศิริกุล",
+                "age": 3
+            },
+            {
+                "name": "มะยุรี มีสวัสดิ์",
+                "age": 8
+            },
+            {
+                "name": "สมภพ ไพศาล",
+                "age": 3
+            },
+            {
+                "name": "ทิพวรรณ ประกอบแก้ว",
+                "age": 7
+            },
+            {
+                "name": "ประวิทย์ สอาดเอี่ยม",
+                "age": 4
+            },
+            {
+                "name": "สุเทพ นิระหานี",
+                "age": 7
+            },
+            {
+                "name": "ภณตรีเจตน์ ธนนันท์โสภณ",
+                "age": 7
+            },
+            {
+                "name": "กฤษดา พงษ์เสริม",
+                "age": 8
+            },
+            {
+                "name": "วราภรณ์ อังศุรัตนเวช",
+                "age": 8
+            },
+            {
+                "name": "อรสา จารุสังวร",
+                "age": 6
+            },
+            {
+                "name": "ณัฐกฤต นามฮุง",
+                "age": 5
+            },
+            {
+                "name": "ณัฐพล นิลศร",
+                "age": 7
+            },
+            {
+                "name": "ไญยิกา นันตะโรหิต",
+                "age": 4
+            },
+            {
+                "name": "ภิรมย์ ช่างเรือน",
+                "age": 6
+            },
+            {
+                "name": "ไวพจน์ ตันเดี่ยว",
+                "age": 9
+            },
+            {
+                "name": "ประสิทธิ์ วงษ์ศักดิ์",
+                "age": 5
+            },
+            {
+                "name": "วันดี งามเสงี่ยม",
+                "age": 3
+            },
+            {
+                "name": "สมศักดิ์ มาพิจารณ์",
+                "age": 4
+            },
+            {
+                "name": "ศรายุธ อยู่ยืน",
+                "age": 5
+            },
+            {
+                "name": "อุดมลักษณ์ วุฒิสิทธิโชค",
+                "age": 4
+            },
+            {
+                "name": "อุดมลักษณ์ เหรียญนิยม",
+                "age": 7
+            },
+            {
+                "name": "สุรี แก้วสนธิ",
+                "age": 7
+            },
+            {
+                "name": "ปิยวิทย์ จิตต์โอภาส",
+                "age": 8
+            },
+            {
+                "name": "มงคล จรัสเพ็ชร์",
+                "age": 4
+            },
+            {
+                "name": "นงลักษณ์ นันทศิริ",
+                "age": 3
+            },
+            {
+                "name": "มนูญ ประสาทศิลป์",
+                "age": 8
+            },
+            {
+                "name": "สมบูรณ์ มณีคุณาภรณ์",
+                "age": 9
+            },
+            {
+                "name": "ศิริเพ็ญ สูตรสุข",
+                "age": 6
+            },
+            {
+                "name": "ปรีดา นุชหมอน",
+                "age": 5
+            },
+            {
+                "name": "ฉลอง ครุฑจีน",
+                "age": 4
+            },
+            {
+                "name": "นัฐศักดิ์ เรืองนุ้ย",
+                "age": 3
+            },
+            {
+                "name": "คมกริช เสาวิจิตร",
+                "age": 5
+            },
+            {
+                "name": "ตอง เทพทาราคุณ",
+                "age": 4
+            },
+            {
+                "name": "มงคล กมลพันธ์",
+                "age": 6
+            },
+            {
+                "name": "กฤษ อภิญญากุล",
+                "age": 7
+            },
+            {
+                "name": "สงวนศักดิ์ แก้วปลั่ง",
+                "age": 7
+            },
+            {
+                "name": "ธนพรรณ คงอินทร์",
+                "age": 4
+            },
+            {
+                "name": "สมชาย ชำนิเขตรการ",
+                "age": 9
+            },
+            {
+                "name": "วลัยลักษณ์ ชินบุรี",
+                "age": 4
+            },
+            {
+                "name": "เกรียงศักดิ์ ทองมา",
+                "age": 7
+            },
+            {
+                "name": "ประกอบ สุภาผล",
+                "age": 7
+            },
+            {
+                "name": "ณัฐพงศ์ ฉ่ำชื่น",
+                "age": 8
+            },
+            {
+                "name": "สุพัตรา รักเดช",
+                "age": 8
+            },
+            {
+                "name": "ธนรัตน์ เฉลิมรักษ์",
+                "age": 3
+            },
+            {
+                "name": "สุทธินันท์ พอสอน",
+                "age": 4
+            },
+            {
+                "name": "ณัฎฐ์ธนัน จันทร์เรือง",
+                "age": 3
+            },
+            {
+                "name": "โกศล เกตุเล็ก",
+                "age": 4
+            }
+        ]
+    };
+
+    function read_child() {
+        return child;
+    }
+
+
+
+</script>
+
 </html>

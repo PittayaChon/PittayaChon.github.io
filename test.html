@@ -27,6 +27,9 @@
     <script src="https://api.longdo.com/map/?key=d0de38067fc4c0774a1e4c8174edaea1"></script>
 
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <h2>HTML Forms</h2>
     <script>
 
@@ -47,11 +50,11 @@
         </div>
 
         <div class="card">
-            
+
             <div class="card-body">
 
                 <input id="material_code" class="form-control form-control-lg" type="text">
-<br>
+                <br>
                 <button onclick="search_material()" type="button" class="btn btn-primary">ค้นหา material</button>
 
             </div>
@@ -59,11 +62,11 @@
 
 
         <div class="card">
-            
+
             <div class="card-body">
 
                 <input id="area_name" class="form-control form-control-lg" type="text">
-<br>
+                <br>
                 <button onclick="search_area()" type="button" class="btn btn-primary">ค้นหา area</button>
 
             </div>
@@ -79,15 +82,13 @@
                 // console.log(value.abbr);
                 return value.code == document.getElementById("material_code").value;
             });
-            console.log("search_material_result", search_material_result) ;
-            if(search_material_result.length  === 0 )
-            {
-                alert("ไม่พบขอมูล") ;
+            console.log("search_material_result", search_material_result);
+            if (search_material_result.length === 0) {
+                alert("ไม่พบขอมูล");
             }
-            else
-            {
-                alert(search_material_result[0].name_old) ;
-            }           
+            else {
+                alert(search_material_result[0].name_old);
+            }
         }
 
 
@@ -96,112 +97,126 @@
                 // console.log(value.abbr);
                 return value.name == document.getElementById("area_name").value;
             });
-            console.log("search_area_result", search_area_result) ;
-            if(search_area_result.length  === 0 )
-            {
-                alert("ไม่พบขอมูล") ;
+            console.log("search_area_result", search_area_result);
+            if (search_area_result.length === 0) {
+                alert("ไม่พบขอมูล");
             }
-            else
-            {
-                alert(search_area_result[0].province) ;
-            }           
+            else {
+                alert(search_area_result[0].province);
+            }
         }
 
 
-        axios({
-            method: 'get',
-            url: 'https://gist.githubusercontent.com/ChaiyachetU/eb18cb962af268f12825d7c8dc65d570/raw/caf1f611babb5bcd305b673ba47c086340dd0136/pea_material_data.json'
-        })
-            .then(response => {
-                material = response.data;
+
+        Swal.fire({
+      title: 'Loading...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+
+      onBeforeOpen: () => {
+       
+      }
+    });
+
+    Swal.showLoading();
 
                 axios({
                     method: 'get',
-                    url: 'https://gist.githubusercontent.com/ChaiyachetU/56fc961f59719d6d078c00f00328a2b4/raw/e23a1a0f4f35ce04c73f930142460bd42b164291/substation_pea.json'
+                    url: 'https://gist.githubusercontent.com/ChaiyachetU/eb18cb962af268f12825d7c8dc65d570/raw/caf1f611babb5bcd305b673ba47c086340dd0136/pea_material_data.json'
                 })
                     .then(response => {
+                        material = response.data;
 
-                        //console.log({"area: ": response.data[1].name } )
-                        area = response.data;
-                        var map = new longdo.Map({
-                            placeholder: document.getElementById('map')
-                        });
+                        axios({
+                            method: 'get',
+                            url: 'https://gist.githubusercontent.com/ChaiyachetU/56fc961f59719d6d078c00f00328a2b4/raw/e23a1a0f4f35ce04c73f930142460bd42b164291/substation_pea.json'
+                        })
+                            .then(response => {
 
-                        var province_group = [];
-                        var province_group_count = [];
-                        var area_stringify = JSON.stringify(area).toString();
-
-                        area_stringify = area_stringify.replace(/latitude\s/g, "latitude");
-                        area_stringify = area_stringify.replace(/longitude\s/g, "longitude");
-                        console.log("area_stringify: ", area_stringify)
-                        // var area_stringify = area_stringify.replace("latitude ", "latitude");
-                        area = JSON.parse(area_stringify);
-                        console.log("area: ", area)
-
-
-                        for (let i = 0; i < area.length; i++) {
-                            console.log("province " ,area[i]   ) ;
-                            //  console.log("province " ,area[i]["province"]   ) ;
-                        
-                            //  console.log("latitude " ,area[i]['latitude']   ) ;
-                            console.log("longitude " ,area[i].longitude  )
-
-                            var marker1 = new longdo.Marker({ lon: area[i]['longitude'], lat: area[i]['latitude'] },
-                                {
-                                    title: area[i]["region_area"],
-                                    icon: {
-                                        url: 'https://map.longdo.com/mmmap/images/pin_mark.png',
-                                        offset: { x: 12, y: 45 }
-                                    },
-                                    detail: '<b>' + area[i]["name"] + '<b><br>' + '' + area[i]["abbr"],
-                                    visibleRange: { min: 2, max: 15 },
-                                    draggable: true,
-                                    weight: longdo.OverlayWeight.Top,
+                                //console.log({"area: ": response.data[1].name } )
+                                area = response.data;
+                                var map = new longdo.Map({
+                                    placeholder: document.getElementById('map')
                                 });
-                            map.Overlays.add(marker1);
-                            // if (province_group.indexOf(area[i].province) < 0) {
-                            //     province_group.push(area[i].province);
-                            //     province_group_count.push({ "province": area[i].province, "count": "0" });
-                            // }
-                            //     else {
 
-                            //     }
-                        }
+                                var province_group = [];
+                                var province_group_count = [];
+                                var area_stringify = JSON.stringify(area).toString();
 
-                        //  console.log("area: ", area)
-                        let area_filter = area.filter(function (value) {
-                            // console.log(value.abbr);
-                            return value.id == 3;
-                        });
-                        console.log("area_filter: ", area_filter)
-
-                        let count = area.reduce(function (object, currentValue, index) {
-                            if (typeof object[currentValue.province] === 'undefined') {
-                                object[currentValue.province] = 1;
-                            } else {
-                                object[currentValue.province]++;
-                            }
-                            return object;
-                        }, {});
-
-                        console.log('counted:', count);
+                                area_stringify = area_stringify.replace(/latitude\s/g, "latitude");
+                                area_stringify = area_stringify.replace(/longitude\s/g, "longitude");
+                                console.log("area_stringify: ", area_stringify)
+                                // var area_stringify = area_stringify.replace("latitude ", "latitude");
+                                area = JSON.parse(area_stringify);
+                                console.log("area: ", area)
 
 
-                        sessionStorage.setItem("area_filter", JSON.stringify(area_filter));
+                                for (let i = 0; i < area.length; i++) {
+                                    console.log("province ", area[i]);
+                                    //  console.log("province " ,area[i]["province"]   ) ;
 
-                        //  window.location.href = "index.html";
+                                    //  console.log("latitude " ,area[i]['latitude']   ) ;
+                                    console.log("longitude ", area[i].longitude)
+
+                                    var marker1 = new longdo.Marker({ lon: area[i]['longitude'], lat: area[i]['latitude'] },
+                                        {
+                                            title: area[i]["region_area"],
+                                            icon: {
+                                                url: 'https://map.longdo.com/mmmap/images/pin_mark.png',
+                                                offset: { x: 12, y: 45 }
+                                            },
+                                            detail: '<b>' + area[i]["name"] + '<b><br>' + '' + area[i]["abbr"],
+                                            visibleRange: { min: 2, max: 15 },
+                                            draggable: true,
+                                            weight: longdo.OverlayWeight.Top,
+                                        });
+                                    map.Overlays.add(marker1);
+                                    // if (province_group.indexOf(area[i].province) < 0) {
+                                    //     province_group.push(area[i].province);
+                                    //     province_group_count.push({ "province": area[i].province, "count": "0" });
+                                    // }
+                                    //     else {
+
+                                    //     }
+                                }
+
+                                //  console.log("area: ", area)
+                                let area_filter = area.filter(function (value) {
+                                    // console.log(value.abbr);
+                                    return value.id == 3;
+                                });
+                                console.log("area_filter: ", area_filter)
+
+                                let count = area.reduce(function (object, currentValue, index) {
+                                    if (typeof object[currentValue.province] === 'undefined') {
+                                        object[currentValue.province] = 1;
+                                    } else {
+                                        object[currentValue.province]++;
+                                    }
+                                    return object;
+                                }, {});
+
+                                console.log('counted:', count);
 
 
+                                sessionStorage.setItem("area_filter", JSON.stringify(area_filter));
+                                swal.close();
+                                //  window.location.href = "index.html";
+
+
+
+                            })
+                            .catch(err => {
+                                console.error("area", err);
+                            })
 
                     })
                     .catch(err => {
-                        console.error("area", err);
+                        console.error("material", err);
                     })
+        
 
-            })
-            .catch(err => {
-                console.error("material", err);
-            })
 
 
 
